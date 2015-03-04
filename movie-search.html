@@ -2,10 +2,24 @@
 <html>
 	<head>
 		<h1>Movie Search</h1>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 	</head>
 	<body>
 		<script>
-			console.log("hello world");
+			$(document).ready(function(){
+				$.ajax({
+					type: "GET",
+					dataType: "json",
+					url: "http://www.omdbapi.com/",
+					data: {
+						s: "the"
+					},
+					contentType: "application/x-www-form-urlencoded; charset=utf-8",
+					crossDomain: true
+				}).done(function(data){
+					console.log(data);
+				});
+			});
 		</script>
 	</body>
 </html>
