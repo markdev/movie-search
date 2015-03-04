@@ -107,7 +107,7 @@
 
 			var app = angular.module('movies', []);
 
-			app.controller('MainCtrl', ['$scope', 'MovieFactory', function ($scope, MovieFactory){
+			app.controller('MainCtrl', ['$scope', '$timeout', 'MovieFactory', function ($scope, $timeout, MovieFactory){
 				$scope.query = "";
 				$scope.movies = [];
 				$scope.predicate = 'Title';
@@ -128,10 +128,10 @@
 				};
 
 				$scope.clickTest = function () {
-					//clearTimeout($scope.popupTimer);
-					setTimeout(function() {
+					$timeout.cancel($scope.popupTimer);
+					$scope.popupTimer = $timeout(function() {
 						$scope.startPopup();
-					}, 1000);
+					}, 2000);
 					MovieFactory.searchFilms($scope.query)
 						.then(function(response) {
 							if (response.Search) {
@@ -149,7 +149,7 @@
 								$scope.movies[index].Runtime = response.Runtime;
 								$scope.movies[index].Director = response.Director;
 								$scope.movies[index].imdbRating = response.imdbRating;
-								//clearTimeout($scope.popupTimer);
+								$timeout.cancel($scope.popupTimer);
 								$scope.endPopup();
 							})
 					};
