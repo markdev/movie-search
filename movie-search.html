@@ -17,17 +17,23 @@
 			app.controller('MainCtrl', ['$scope', 'MovieFactory', function ($scope, MovieFactory){
 				$scope.test = "foo";
 				$scope.clickTest = function () {
-					var test = MovieFactory.searchFilms();
-					$scope.test = test;
+					MovieFactory.searchFilms()
+						.then(function(response) {
+							console.log(response);
+						})
 				};
-
 			}]);
 
 			app.factory('MovieFactory', ['$http', '$q', function($http, $q) {
 				var MovieFactory = {};
 
 				MovieFactory.searchFilms = function() {
-					return "Here they are";
+					var deferred = $q.defer();
+					$http.get("http://www.omdbapi.com/?s=god")
+						.success(function(movies) {
+							deferred.resolve(movies)
+						})
+					return deferred.promise;
 				};
 
 				return MovieFactory;
