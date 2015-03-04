@@ -128,8 +128,8 @@
 				};
 
 				$scope.clickTest = function () {
-					clearTimeout($scope.popupTimer);
-					$scope.popupTimer = setTimeout(function() {
+					//clearTimeout($scope.popupTimer);
+					setTimeout(function() {
 						$scope.startPopup();
 					}, 1000);
 					MovieFactory.searchFilms($scope.query)
@@ -149,7 +149,7 @@
 								$scope.movies[index].Runtime = response.Runtime;
 								$scope.movies[index].Director = response.Director;
 								$scope.movies[index].imdbRating = response.imdbRating;
-								clearTimeout($scope.popupTimer);
+								//clearTimeout($scope.popupTimer);
 								$scope.endPopup();
 							})
 					};
