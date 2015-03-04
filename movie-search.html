@@ -1,65 +1,81 @@
 <!doctype html>
 <html>
 	<head>
-		<h1>Movie Search</h1>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Lobster">
 		<style>
-			table td {
-				border: 1px solid black;
-				padding: 5px;
-			}
+			body { background-image: url("http://www.augustg.com/images/movie-home-theater-background.jpg"); 
+					background-size: 100%;}
+			table {margin: 25px auto; border-radius: 25px;}
+			h1#title { margin: auto; text-align: center; size: 3em; color: white; font-family: 'Lobster', serif; }
+			div#searchContainer { padding: 10px; background-color: #fff; margin: auto; width: 300px; border-radius: 15px; border: 2px solid black;}
+			div#searchContainer input { font-size: 2em: color: #00f;}
+			table#filters {background-color: #fff;}
+			table#movieDisplay {background-color: #fff;}
+			table#movieDisplay thead td#name { width: 20px; }
+			table#movieDisplay thead td#year { width: 20px; }
+			table#movieDisplay thead td#rated { width: 20px; }
+			table#movieDisplay thead td#runtime { width: 20px; }
+			table#movieDisplay thead td#director { width: 20px; }
+			table#movieDisplay thead td#imdbRating { width: 20px; }
+			table#movieDisplay thead td#plot { width: 20px; }
+
 		</style>
 	</head>
 	<body ng-app="movies" ng-controller="MainCtrl">
-		<div>
+		<h1 id="title">IMDB Movie Search</h1>
+		<div id="searchContainer">
 			<input type="text" id="searchbox" ng-model="query"/>
 			<button ng-click="clickTest()">Click Me</button>
-			<table>
-				<tr>
-					<td><input type="checkbox" ng-model="year"><label>Year</label></td>
-					<td><input type="checkbox" ng-model="rated"><label>Rated</label></td>
-					<td><input type="checkbox" ng-model="runtime"><label>Runtime</label></td>
-					<td><input type="checkbox" ng-model="director"><label>Director</label></td>
-					<td><input type="checkbox" ng-model="imdbRating"><label>IMDB Rating</label></td>
-					<td><input type="checkbox" ng-model="plot"><label>Plot</label></td>
-				</tr>
-			</table>
-			<table id="movies">
-				<thead>
-					<td>Name</td>
-					<td ng-show="year">Year
-						<a href="" ng-click="predicate = 'Year'; reverse=false">^</a>
-						<a href="" ng-click="predicate = 'Year'; reverse=true">V</a>
-					</td>
-					<td ng-show="rated">Rated
-						<a href="" ng-click="predicate = 'Rated'; reverse=false">^</a>
-						<a href="" ng-click="predicate = 'Rated'; reverse=true">V</a>
-					</td>
-					<td ng-show="runtime">Runtime
-						<a href="" ng-click="predicate = 'Runtime'; reverse=false">^</a>
-						<a href="" ng-click="predicate = 'Runtime'; reverse=true">V</a>
-					</td>
-					<td ng-show="director">Director
-						<a href="" ng-click="predicate = 'Director'; reverse=false">^</a>
-						<a href="" ng-click="predicate = 'Director'; reverse=true">V</a>
-					</td>
-					<td ng-show="imdbRating">IMDB Rating
-						<a href="" ng-click="predicate = 'imdbRating'; reverse=false">^</a>
-						<a href="" ng-click="predicate = 'imdbRating'; reverse=true">V</a>
-					</td>
-					<td ng-show="plot">Plot</td>
-				</thead>
-				<tr ng-repeat="movie in movies | orderBy : predicate : reverse">
-					<td> {{movie.Title}} </td>
-					<td ng-show="year"> {{movie.Year}} </td>
-					<td ng-show="rated"> {{movie.Rated}} </td>
-					<td ng-show="runtime"> {{movie.Runtime}} </td>
-					<td ng-show="director"> {{movie.Director}} </td>
-					<td ng-show="imdbRating"> {{movie.imdbRating}} </td>
-					<td ng-show="plot"> {{movie.Plot}} </td>
-				</tr>
-			</table>
 		</div>
+		<table id="filters">
+			<tr>
+				<td colspan="6">Filters:</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" ng-model="year"><label>Year</label></td>
+				<td><input type="checkbox" ng-model="rated"><label>Rated</label></td>
+				<td><input type="checkbox" ng-model="runtime"><label>Runtime</label></td>
+				<td><input type="checkbox" ng-model="director"><label>Director</label></td>
+				<td><input type="checkbox" ng-model="imdbRating"><label>IMDB Rating</label></td>
+				<td><input type="checkbox" ng-model="plot"><label>Plot</label></td>
+			</tr>
+		</table>
+		<table id="movieDisplay">
+			<thead>
+				<td id="name">Name</td>
+				<td id="year" ng-show="year">Year
+					<a href="" ng-click="predicate = 'Year'; reverse=false">^</a>
+					<a href="" ng-click="predicate = 'Year'; reverse=true">V</a>
+				</td>
+				<td id="rated" ng-show="rated">Rated
+					<a href="" ng-click="predicate = 'Rated'; reverse=false">^</a>
+					<a href="" ng-click="predicate = 'Rated'; reverse=true">V</a>
+				</td>
+				<td id="runtime" ng-show="runtime">Runtime
+					<a href="" ng-click="predicate = 'Runtime'; reverse=false">^</a>
+					<a href="" ng-click="predicate = 'Runtime'; reverse=true">V</a>
+				</td>
+				<td id="director" ng-show="director">Director
+					<a href="" ng-click="predicate = 'Director'; reverse=false">^</a>
+					<a href="" ng-click="predicate = 'Director'; reverse=true">V</a>
+				</td>
+				<td id="imdbRating" ng-show="imdbRating">IMDB Rating
+					<a href="" ng-click="predicate = 'imdbRating'; reverse=false">^</a>
+					<a href="" ng-click="predicate = 'imdbRating'; reverse=true">V</a>
+				</td>
+				<td id="plot" ng-show="plot">Plot</td>
+			</thead>
+			<tr ng-repeat="movie in movies | orderBy : predicate : reverse">
+				<td> {{movie.Title}} </td>
+				<td ng-show="year"> {{movie.Year}} </td>
+				<td ng-show="rated"> {{movie.Rated}} </td>
+				<td ng-show="runtime"> {{movie.Runtime}} </td>
+				<td ng-show="director"> {{movie.Director}} </td>
+				<td ng-show="imdbRating"> {{movie.imdbRating}} </td>
+				<td ng-show="plot"> {{movie.Plot}} </td>
+			</tr>
+		</table>
 		<script>
 
 			var app = angular.module('movies', []);
