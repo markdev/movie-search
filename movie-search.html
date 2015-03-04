@@ -23,16 +23,16 @@
 			table#movieDisplay thead td#plot { width: 350px; }
 			table#movieDisplay tbody td {text-align: center; }
 			table#movieDisplay tbody tr:nth-child(odd) {background-color: #ddd;}
-			div#blackout { position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 100; }
-			div#blackout div#longMessage { width: 200px; height: 200px; background-color: #fff; margin: auto; margin-top: 200px; padding: 20px; text-align: center; }
+			div#popup { position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 100; }
+			div#popup div#longMessage { width: 200px; height: 200px; background-color: #fff; margin: auto; margin-top: 200px; padding: 20px; text-align: center; }
 
 		</style>
 	</head>
 	<body ng-app="movies" ng-controller="MainCtrl">
-		<div id="blackout" ng-show="blackout">
+		<div id="popup" ng-show="popup">
 			<div id="longMessage">
 				<p>Waiting to hear back from the imdb server, shouldn't be much longer</p>
-				<button ng-click="endBlackout()">Close This Window</button>
+				<button ng-click="endPopup()">Close This Window</button>
 			</div>
 		</div>
 		<h1 id="title">IMDB Movie Search</h1>
@@ -118,21 +118,20 @@
 				$scope.director = false;
 				$scope.plot = false;
 				$scope.imdbRating = false;
-				$scope.blackout = false;
-				$scope.blackoutTimer = false;
-				$scope.endBlackout = function() {
-					$scope.blackout = false;
+				$scope.popup = false;
+				$scope.popupTimer = false;
+				$scope.endPopup = function() {
+					$scope.popup = false;
 				};
-				$scope.startBlackout = function() {
-					$scope.blackout = true;
-					console.log("blacking out");
+				$scope.startPopup = function() {
+					$scope.popup = true;
 				};
 
 				$scope.clickTest = function () {
-					clearTimeout($scope.blackoutTimer);
-					$scope.blackoutTimer = setTimeout(function() {
-						$scope.startBlackout();
-					}, 1);
+					clearTimeout($scope.popupTimer);
+					$scope.popupTimer = setTimeout(function() {
+						$scope.startPopup();
+					}, 1000);
 					MovieFactory.searchFilms($scope.query)
 						.then(function(response) {
 							if (response.Search) {
@@ -150,8 +149,8 @@
 								$scope.movies[index].Runtime = response.Runtime;
 								$scope.movies[index].Director = response.Director;
 								$scope.movies[index].imdbRating = response.imdbRating;
-								clearTimeout($scope.blackoutTimer);
-								$scope.endBlackout();
+								clearTimeout($scope.popupTimer);
+								$scope.endPopup();
 							})
 					};
 				};
