@@ -14,13 +14,15 @@
 		<div>
 			<input type="text" id="searchbox" ng-model="query"/>
 			<button ng-click="clickTest()">Click Me</button>
-			<ul>
-				<li><input type="checkbox" ng-model="year"><label>Year</label></li>
-				<li><input type="checkbox" ng-model="rated"><label>Rated</label></li>
-				<li><input type="checkbox" ng-model="runtime"><label>Runtime</label></li>
-				<li><input type="checkbox" ng-model="director"><label>Director</label></li>
-				<li><input type="checkbox" ng-model="imdbRating"><label>IMDB Rating</label></li>
-			</ul>
+			<table>
+				<tr>
+					<td><input type="checkbox" ng-model="year"><label>Year</label></td>
+					<td><input type="checkbox" ng-model="rated"><label>Rated</label></td>
+					<td><input type="checkbox" ng-model="runtime"><label>Runtime</label></td>
+					<td><input type="checkbox" ng-model="director"><label>Director</label></td>
+					<td><input type="checkbox" ng-model="imdbRating"><label>IMDB Rating</label></td>
+				</tr>
+			</table>
 			<table id="movies">
 				<thead>
 					<td>Name</td>
@@ -84,7 +86,7 @@
 				var MovieFactory = {};
 				MovieFactory.searchFilms = function(query) {
 					var deferred = $q.defer();
-					$http.get("http://www.omdbapi.com/?s=" + query)
+					$http.get("http://www.omdbapi.com/?s=" + query + "&type=movie")
 						.success(function(movies) {
 							deferred.resolve(movies)
 						})
