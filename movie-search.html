@@ -12,7 +12,7 @@
 	</head>
 	<body ng-app="movies" ng-controller="MainCtrl">
 		<div>
-			<input type="text" id="searchbox" ng-model="test"/>
+			<input type="text" id="searchbox" ng-model="query"/>
 			<button ng-click="clickTest()">Click Me</button>
 			<table id="movies">
 				<thead>
@@ -23,7 +23,7 @@
 				<tr ng-repeat="movie in movies">
 					<td> {{movie.Title}} </td>
 					<td> {{movie.Year}} </td>
-					<td> {{movie.imdbID}} </td>
+					<td> {{movie.plot}} </td>
 				</tr>
 			</table>
 		</div>
@@ -32,27 +32,47 @@
 			var app = angular.module('movies', []);
 
 			app.controller('MainCtrl', ['$scope', 'MovieFactory', function ($scope, MovieFactory){
-				$scope.test = "foo";
+				$scope.query = "";
 				$scope.movies = [];
+				var getMovieInfo = function(index, id) {
+					MovieFactory.searchById(id)
+						.then(function(response) {
+							$scope.movies[index].plot = response.Plot;
+						})
+				};
 				$scope.clickTest = function () {
-					MovieFactory.searchFilms()
+					MovieFactory.searchFilms($scope.query)
 						.then(function(response) {
 							$scope.movies = response.Search;
 							console.log($scope.movies);
+							for(var i=0; i<$scope.movies.length; i++) {
+								$scope.movies[i].foo = i * 20;
+								getMovieInfo(i, $scope.movies[i].imdbID);
+							}
 						})
 				};
 			}]);
 
 			app.factory('MovieFactory', ['$http', '$q', function($http, $q) {
 				var MovieFactory = {};
-				MovieFactory.searchFilms = function() {
+				MovieFactory.searchFilms = function(query) {
 					var deferred = $q.defer();
-					$http.get("http://www.omdbapi.com/?s=god")
+					$http.get("http://www.omdbapi.com/?s=" + query)
 						.success(function(movies) {
 							deferred.resolve(movies)
 						})
 					return deferred.promise;
 				};
+
+				MovieFactory.searchById = function(id) {
+					var deferred = $q.defer();
+					$http.get("http://www.omdbapi.com/?i=" + id)
+						.success(function(movie) {
+							deferred.resolve(movie)
+						})
+					return deferred.promise;
+				};
+
 				return MovieFactory;
 			}]);
 
