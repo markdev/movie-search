@@ -21,28 +21,42 @@
 					<td><input type="checkbox" ng-model="runtime"><label>Runtime</label></td>
 					<td><input type="checkbox" ng-model="director"><label>Director</label></td>
 					<td><input type="checkbox" ng-model="imdbRating"><label>IMDB Rating</label></td>
+					<td><input type="checkbox" ng-model="plot"><label>Plot</label></td>
 				</tr>
 			</table>
 			<table id="movies">
 				<thead>
 					<td>Name</td>
-					<td>Year</td>
-					<td>ID</td>
-					<td ng-show="year">Year</td>
-					<td ng-show="rated">Rated</td>
-					<td ng-show="runtime">Runtime</td>
-					<td ng-show="director">Director</td>
-					<td ng-show="imdbRating">IMDB Rating</td>
+					<td ng-show="year">Year
+						<a href="" ng-click="predicate = 'Year'; reverse=false">^</a>
+						<a href="" ng-click="predicate = 'Year'; reverse=true">V</a>
+					</td>
+					<td ng-show="rated">Rated
+						<a href="" ng-click="predicate = 'Rated'; reverse=false">^</a>
+						<a href="" ng-click="predicate = 'Rated'; reverse=true">V</a>
+					</td>
+					<td ng-show="runtime">Runtime
+						<a href="" ng-click="predicate = 'Runtime'; reverse=false">^</a>
+						<a href="" ng-click="predicate = 'Runtime'; reverse=true">V</a>
+					</td>
+					<td ng-show="director">Director
+						<a href="" ng-click="predicate = 'Director'; reverse=false">^</a>
+						<a href="" ng-click="predicate = 'Director'; reverse=true">V</a>
+					</td>
+					<td ng-show="imdbRating">IMDB Rating
+						<a href="" ng-click="predicate = 'imdbRating'; reverse=false">^</a>
+						<a href="" ng-click="predicate = 'imdbRating'; reverse=true">V</a>
+					</td>
+					<td ng-show="plot">Plot</td>
 				</thead>
-				<tr ng-repeat="movie in movies">
+				<tr ng-repeat="movie in movies | orderBy : predicate : reverse">
 					<td> {{movie.Title}} </td>
-					<td> {{movie.Year}} </td>
-					<td> {{movie.Plot}} </td>
 					<td ng-show="year"> {{movie.Year}} </td>
 					<td ng-show="rated"> {{movie.Rated}} </td>
 					<td ng-show="runtime"> {{movie.Runtime}} </td>
 					<td ng-show="director"> {{movie.Director}} </td>
 					<td ng-show="imdbRating"> {{movie.imdbRating}} </td>
+					<td ng-show="plot"> {{movie.Plot}} </td>
 				</tr>
 			</table>
 		</div>
@@ -53,11 +67,14 @@
 			app.controller('MainCtrl', ['$scope', 'MovieFactory', function ($scope, MovieFactory){
 				$scope.query = "";
 				$scope.movies = [];
-				$scope.year = false;
-				$scope.rated = false;
-				$scope.runtime = false;
-				$scope.director = false;
-				$scope.imdbRating = false;
+				$scope.predicate = 'Title';
+				$scope.reverse = false;
+				$scope.year = true;
+				$scope.rated = true;
+				$scope.runtime = true;
+				$scope.director = true;
+				$scope.plot = true;
+				$scope.imdbRating = true;
 				var getMovieInfo = function(index, id) {
 					MovieFactory.searchById(id)
 						.then(function(response) {
