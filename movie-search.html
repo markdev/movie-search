@@ -6,40 +6,54 @@
 		<style>
 			body { background-image: url("http://www.augustg.com/images/movie-home-theater-background.jpg"); 
 					background-size: 100%;}
-			table {margin: 25px auto; border-radius: 25px;}
+			table {}
 			h1#title { margin: auto; text-align: center; size: 3em; color: white; font-family: 'Lobster', serif; }
-			div#searchContainer { padding: 10px; background-color: #fff; margin: auto; width: 300px; border-radius: 15px; border: 2px solid black;}
-			div#searchContainer input { font-size: 2em: color: #00f;}
-			table#filters {background-color: #fff;}
-			table#movieDisplay {background-color: #fff;}
-			table#movieDisplay thead td#name { width: 20px; }
-			table#movieDisplay thead td#year { width: 20px; }
-			table#movieDisplay thead td#rated { width: 20px; }
-			table#movieDisplay thead td#runtime { width: 20px; }
-			table#movieDisplay thead td#director { width: 20px; }
-			table#movieDisplay thead td#imdbRating { width: 20px; }
-			table#movieDisplay thead td#plot { width: 20px; }
+			table#searchContainer { padding: 10px; background-color: #fff; margin: auto; width: 300px; border-radius: 15px; border: 2px solid black;}
+			table#searchContainer input { font-size: 2em: color: #00f;}
+			table#control {background-color: #fff; margin: 20px auto; border-radius: 20px;}
+			table#movieDisplay {background-color: #fff; margin: 20px auto; border-radius: 20px;}
+			table#movieDisplay thead { }
+			table#movieDisplay thead td { text-align: center; padding: 4px;}
+			table#movieDisplay thead td#name { width: 100px; }
+			table#movieDisplay thead td#year { width: 100px; }
+			table#movieDisplay thead td#rated { width: 100px; }
+			table#movieDisplay thead td#runtime { width: 100px; }
+			table#movieDisplay thead td#director { width: 100px; }
+			table#movieDisplay thead td#imdbRating { width: 120px; }
+			table#movieDisplay thead td#plot { width: 350px; }
+			table#movieDisplay tbody td {text-align: center; }
+			table#movieDisplay tbody tr:nth-child(odd) {background-color: #ddd;}
 
 		</style>
 	</head>
 	<body ng-app="movies" ng-controller="MainCtrl">
 		<h1 id="title">IMDB Movie Search</h1>
-		<div id="searchContainer">
-			<input type="text" id="searchbox" ng-model="query"/>
-			<button ng-click="clickTest()">Click Me</button>
-		</div>
-		<table id="filters">
+		<table id="control">
 			<tr>
-				<td colspan="6">Filters:</td>
+				<td>
+					<table>
+						<tr>
+							<td><input type="text" id="searchbox" ng-model="query"/></td>
+							<td><button ng-click="clickTest()">Click Me</button></td>
+						</tr>
+					</table>
+				</td>
+				<td colspan="6">
+					<table>
+
+						<tr><td>Filters:</td></tr>
+						<tr>
+							<td><input type="checkbox" ng-model="year"><label>Year</label></td>
+							<td><input type="checkbox" ng-model="rated"><label>Rated</label></td>
+							<td><input type="checkbox" ng-model="runtime"><label>Runtime</label></td>
+							<td><input type="checkbox" ng-model="director"><label>Director</label></td>
+							<td><input type="checkbox" ng-model="imdbRating"><label>IMDB Rating</label></td>
+							<td><input type="checkbox" ng-model="plot"><label>Plot</label></td>
+						</tr>
+					</table>
+				</td>
 			</tr>
-			<tr>
-				<td><input type="checkbox" ng-model="year"><label>Year</label></td>
-				<td><input type="checkbox" ng-model="rated"><label>Rated</label></td>
-				<td><input type="checkbox" ng-model="runtime"><label>Runtime</label></td>
-				<td><input type="checkbox" ng-model="director"><label>Director</label></td>
-				<td><input type="checkbox" ng-model="imdbRating"><label>IMDB Rating</label></td>
-				<td><input type="checkbox" ng-model="plot"><label>Plot</label></td>
-			</tr>
+
 		</table>
 		<table id="movieDisplay">
 			<thead>
@@ -66,15 +80,17 @@
 				</td>
 				<td id="plot" ng-show="plot">Plot</td>
 			</thead>
-			<tr ng-repeat="movie in movies | orderBy : predicate : reverse">
-				<td> {{movie.Title}} </td>
-				<td ng-show="year"> {{movie.Year}} </td>
-				<td ng-show="rated"> {{movie.Rated}} </td>
-				<td ng-show="runtime"> {{movie.Runtime}} </td>
-				<td ng-show="director"> {{movie.Director}} </td>
-				<td ng-show="imdbRating"> {{movie.imdbRating}} </td>
-				<td ng-show="plot"> {{movie.Plot}} </td>
-			</tr>
+			<tbody>
+				<tr ng-repeat="movie in movies | orderBy : predicate : reverse">
+					<td> {{movie.Title}} </td>
+					<td ng-show="year"> {{movie.Year}} </td>
+					<td ng-show="rated"> {{movie.Rated}} </td>
+					<td ng-show="runtime"> {{movie.Runtime}} </td>
+					<td ng-show="director"> {{movie.Director}} </td>
+					<td ng-show="imdbRating"> {{movie.imdbRating}} </td>
+					<td ng-show="plot"> {{movie.Plot}} </td>
+				</tr>
+			</tbody>
 		</table>
 		<script>
 
