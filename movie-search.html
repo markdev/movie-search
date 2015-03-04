@@ -23,13 +23,13 @@
 			table#movieDisplay thead td#plot { width: 350px; }
 			table#movieDisplay tbody td {text-align: center; }
 			table#movieDisplay tbody tr:nth-child(odd) {background-color: #ddd;}
-			div#blackout { position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; background-color: #000; opacity: .5; z-index: 100; }
+			div#blackout { position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 100; }
 			div#blackout div#longMessage { width: 200px; height: 200px; background-color: #fff; margin: auto; margin-top: 200px; padding: 20px; text-align: center; }
 
 		</style>
 	</head>
 	<body ng-app="movies" ng-controller="MainCtrl">
-		<div id="blackout" ng-show="blackout()">
+		<div id="blackout" ng-show="blackout">
 			<div id="longMessage">
 				<p>Waiting to hear back from the imdb server, shouldn't be much longer</p>
 				<button ng-click="endBlackout()">Close This Window</button>
@@ -119,30 +119,41 @@
 				$scope.plot = false;
 				$scope.imdbRating = false;
 				$scope.blackout = false;
+				$scope.blackoutTimer = false;
 				$scope.endBlackout = function() {
-					console.log("ending");
+					$scope.blackout = false;
 				};
-				var getMovieInfo = function(index, id) {
-					MovieFactory.searchById(id)
-						.then(function(response) {
-							$scope.movies[index].Plot = response.Plot;
-							$scope.movies[index].Rated = response.Rated;
-							$scope.movies[index].Runtime = response.Runtime;
-							$scope.movies[index].Director = response.Director;
-							$scope.movies[index].imdbRating = response.imdbRating;
-							console.log(response);
-						})
+				$scope.startBlackout = function() {
+					$scope.blackout = true;
+					console.log("blacking out");
 				};
+
 				$scope.clickTest = function () {
+					clearTimeout($scope.blackoutTimer);
+					$scope.blackoutTimer = setTimeout(function() {
+						$scope.startBlackout();
+					}, 1);
 					MovieFactory.searchFilms($scope.query)
 						.then(function(response) {
-							$scope.movies = response.Search;
-							console.log($scope.movies);
-							for(var i=0; i<$scope.movies.length; i++) {
-								$scope.movies[i].foo = i * 20;
-								getMovieInfo(i, $scope.movies[i].imdbID);
+							if (response.Search) {
+								$scope.movies = response.Search;
+								for(var i=0; i<$scope.movies.length; i++) {
+									getMovieInfo(i, $scope.movies[i].imdbID);
+								}
 							}
 						})
+					var getMovieInfo = function(index, id) {
+						MovieFactory.searchById(id)
+							.then(function(response) {
+								$scope.movies[index].Plot = response.Plot;
+								$scope.movies[index].Rated = response.Rated;
+								$scope.movies[index].Runtime = response.Runtime;
+								$scope.movies[index].Director = response.Director;
+								$scope.movies[index].imdbRating = response.imdbRating;
+								clearTimeout($scope.blackoutTimer);
+								$scope.endBlackout();
+							})
+					};
 				};
 			}]);
 
