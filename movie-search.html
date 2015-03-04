@@ -16,7 +16,7 @@
 			<button ng-click="clickTest()">Click Me</button>
 			<ul>
 				<li><input type="checkbox" ng-model="year"><label>Year</label></li>
-				<li><input type="checkbox" ng-model="rating"><label>Rating</label></li>
+				<li><input type="checkbox" ng-model="rated"><label>Rated</label></li>
 				<li><input type="checkbox" ng-model="runtime"><label>Runtime</label></li>
 				<li><input type="checkbox" ng-model="director"><label>Director</label></li>
 				<li><input type="checkbox" ng-model="imdbRating"><label>IMDB Rating</label></li>
@@ -27,7 +27,7 @@
 					<td>Year</td>
 					<td>ID</td>
 					<td ng-show="year">Year</td>
-					<td ng-show="rating">Rating</td>
+					<td ng-show="rated">Rated</td>
 					<td ng-show="runtime">Runtime</td>
 					<td ng-show="director">Director</td>
 					<td ng-show="imdbRating">IMDB Rating</td>
@@ -35,7 +35,12 @@
 				<tr ng-repeat="movie in movies">
 					<td> {{movie.Title}} </td>
 					<td> {{movie.Year}} </td>
-					<td> {{movie.plot}} </td>
+					<td> {{movie.Plot}} </td>
+					<td ng-show="year"> {{movie.Year}} </td>
+					<td ng-show="rated"> {{movie.Rated}} </td>
+					<td ng-show="runtime"> {{movie.Runtime}} </td>
+					<td ng-show="director"> {{movie.Director}} </td>
+					<td ng-show="imdbRating"> {{movie.imdbRating}} </td>
 				</tr>
 			</table>
 		</div>
@@ -47,14 +52,19 @@
 				$scope.query = "";
 				$scope.movies = [];
 				$scope.year = false;
-				$scope.rating = false;
+				$scope.rated = false;
 				$scope.runtime = false;
 				$scope.director = false;
 				$scope.imdbRating = false;
 				var getMovieInfo = function(index, id) {
 					MovieFactory.searchById(id)
 						.then(function(response) {
-							$scope.movies[index].plot = response.Plot;
+							$scope.movies[index].Plot = response.Plot;
+							$scope.movies[index].Rated = response.Rated;
+							$scope.movies[index].Runtime = response.Runtime;
+							$scope.movies[index].Director = response.Director;
+							$scope.movies[index].imdbRating = response.imdbRating;
+							console.log(response);
 						})
 				};
 				$scope.clickTest = function () {
