@@ -34,14 +34,14 @@
 					<table>
 						<tr>
 							<td><input type="text" id="searchbox" ng-model="query"/></td>
-							<td><button ng-click="clickTest()">Click Me</button></td>
+							<td><button ng-click="clickTest()">Search for Movie</button></td>
 						</tr>
 					</table>
 				</td>
 				<td colspan="6">
 					<table>
 
-						<tr><td>Filters:</td></tr>
+						<tr><td colspan="6" style="text-align: center;">Filters: (check to show columns)</td></tr>
 						<tr>
 							<td><input type="checkbox" ng-model="year"><label>Year</label></td>
 							<td><input type="checkbox" ng-model="rated"><label>Rated</label></td>
@@ -57,7 +57,10 @@
 		</table>
 		<table id="movieDisplay">
 			<thead>
-				<td id="name">Name</td>
+				<td id="name">Name
+					<a href="" ng-click="predicate = 'Title'; reverse=false">^</a>
+					<a href="" ng-click="predicate = 'Title'; reverse=true">V</a>
+				</td>
 				<td id="year" ng-show="year">Year
 					<a href="" ng-click="predicate = 'Year'; reverse=false">^</a>
 					<a href="" ng-click="predicate = 'Year'; reverse=true">V</a>
@@ -102,11 +105,11 @@
 				$scope.predicate = 'Title';
 				$scope.reverse = false;
 				$scope.year = true;
-				$scope.rated = true;
-				$scope.runtime = true;
-				$scope.director = true;
-				$scope.plot = true;
-				$scope.imdbRating = true;
+				$scope.rated = false;
+				$scope.runtime = false;
+				$scope.director = false;
+				$scope.plot = false;
+				$scope.imdbRating = false;
 				var getMovieInfo = function(index, id) {
 					MovieFactory.searchById(id)
 						.then(function(response) {
