@@ -42,7 +42,7 @@
 					<table>
 						<tr>
 							<td><input type="text" id="searchbox" ng-model="query"/></td>
-							<td><button ng-click="clickTest()">Search for Movie</button></td>
+							<td><button ng-click="search()">Search for Movie</button></td>
 						</tr>
 					</table>
 				</td>
@@ -107,27 +107,26 @@
 
 			var app = angular.module('movies', []);
 
-			app.controller('MainCtrl', ['$scope', '$timeout', 'MovieFactory', function ($scope, $timeout, MovieFactory){
+			app.controller('MainCtrl', ['$scope', '$timeout', 'MovieFactory', function ($scope, $timeout, MovieFactory) {
 				$scope.query = "";
 				$scope.movies = [];
+				// display order variables
 				$scope.predicate = 'Title';
 				$scope.reverse = false;
+				// display filter variables
 				$scope.year = true;
 				$scope.rated = false;
 				$scope.runtime = false;
 				$scope.director = false;
 				$scope.plot = false;
 				$scope.imdbRating = false;
+				// alert popup variables
 				$scope.popup = false;
 				$scope.popupTimer = false;
-				$scope.endPopup = function() {
-					$scope.popup = false;
-				};
-				$scope.startPopup = function() {
-					$scope.popup = true;
-				};
-
-				$scope.clickTest = function () {
+				$scope.endPopup = function() { $scope.popup = false; };
+				$scope.startPopup = function() { $scope.popup = true; };
+				// the actual search
+				$scope.search = function () {
 					$timeout.cancel($scope.popupTimer);
 					$scope.popupTimer = $timeout(function() {
 						$scope.startPopup();
