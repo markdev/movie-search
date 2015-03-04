@@ -3,21 +3,53 @@
 	<head>
 		<h1>Movie Search</h1>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<input type="text" id="searchbox" />
+		<table id="movies">
+		</table>
 	</head>
 	<body>
 		<script>
 			$(document).ready(function(){
-				$.ajax({
-					type: "GET",
-					dataType: "json",
-					url: "http://www.omdbapi.com/",
-					data: {
-						s: "the"
-					},
-					contentType: "application/x-www-form-urlencoded; charset=utf-8",
-					crossDomain: true
-				}).done(function(data){
-					console.log(data);
+				var searchFor = function(val) {
+					var getMovieDetail = function(imdbID) {
+						console.log(imdbID);
+						$.ajax({
+							type: "GET",
+							dataType: "json",
+							url: "http://www.omdbapi.com/",
+							data: {
+								i: imdbID
+							},
+							success: function(response) {
+								$('table#movies tr#' + imdbID).append('<td>' + response.Title + '</td><td>' + response.Year + '</td><td>' + response.Plot + '</td>');
+							}
+						})
+					};
+					$.ajax({
+						type: "GET",
+						dataType: "json",
+						url: "http://www.omdbapi.com/",
+						data: {
+							s: val
+						},
+						contentType: "application/x-www-form-urlencoded; charset=utf-8",
+						crossDomain: true,
+						success: function(response) {
+							$('table#movies').empty();
+							for (var i=0; i<response.Search.length; i++) {
+								var movie = response.Search[i];
+								$('table#movies').append("<tr id='" + movie.imdbID + "'></tr>");
+								getMovieDetail(movie.imdbID);
+							}
+		
+						}
+					});
+				}
+
+				$('#searchbox').on("keypress", function(){
+					var val = $('#searchbox').val();
+					console.log(val);
+					searchFor(val);
 				});
 			});
 		</script>
