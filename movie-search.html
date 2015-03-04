@@ -14,11 +14,23 @@
 		<div>
 			<input type="text" id="searchbox" ng-model="query"/>
 			<button ng-click="clickTest()">Click Me</button>
+			<ul>
+				<li><input type="checkbox" ng-model="year"><label>Year</label></li>
+				<li><input type="checkbox" ng-model="rating"><label>Rating</label></li>
+				<li><input type="checkbox" ng-model="runtime"><label>Runtime</label></li>
+				<li><input type="checkbox" ng-model="director"><label>Director</label></li>
+				<li><input type="checkbox" ng-model="imdbRating"><label>IMDB Rating</label></li>
+			</ul>
 			<table id="movies">
 				<thead>
 					<td>Name</td>
 					<td>Year</td>
 					<td>ID</td>
+					<td ng-show="year">Year</td>
+					<td ng-show="rating">Rating</td>
+					<td ng-show="runtime">Runtime</td>
+					<td ng-show="director">Director</td>
+					<td ng-show="imdbRating">IMDB Rating</td>
 				</thead>
 				<tr ng-repeat="movie in movies">
 					<td> {{movie.Title}} </td>
@@ -34,6 +46,11 @@
 			app.controller('MainCtrl', ['$scope', 'MovieFactory', function ($scope, MovieFactory){
 				$scope.query = "";
 				$scope.movies = [];
+				$scope.year = false;
+				$scope.rating = false;
+				$scope.runtime = false;
+				$scope.director = false;
+				$scope.imdbRating = false;
 				var getMovieInfo = function(index, id) {
 					MovieFactory.searchById(id)
 						.then(function(response) {
